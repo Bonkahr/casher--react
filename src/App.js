@@ -1,7 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.scss';
 
+import HomePage from './components/homePage/homePage';
 import Navbar from './components/navbar/navbar-component';
 import SignIn from './components/signIn/signIn';
 import SignUp from './components/signUp/signUp';
@@ -10,37 +12,56 @@ import Expenditure from './components/expenditure/expenditure';
 function App() {
   const BaseUrl = 'http://127.0.0.1:8000/';
 
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [error, setError] = useState('');
 
-  const [authToken, setAuthToken] = useState(null);
-  const [authTokenType, setAuthTokenType] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [ userType, setUserType ] = useState('');
+  const [userId, setUserId] = useState('');
+  const [authToken, setAuthToken] = useState('');
+  const [name, setName] = useState('');
+  const [authTokenType, setAuthTokenType] = useState('');
+  const [username, setUsername] = useState('');
+  const [userType, setUserType] = useState('');
 
+  const directLogin = (username, password) => {
+    let formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    const requestOptions = {
+      method: 'POST',
+      body: formData,
+    };
 
+    fetch(BaseUrl + 'login', requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((data) => {
+        setAuthToken(data.access_token);
+        setName(data.name);
+        setAuthTokenType(data.token_type);
+        setUserId(data.user_id);
+        setUsername(data.username);
+        setUserType(data.user_type);
 
-  useEffect(() => {
-    setAuthToken(window.localStorage.getItem('authToken'));
-    setAuthTokenType(window.localStorage.getItem('authTokenType'));
-    setUsername(window.localStorage.getItem('username'));
-    setUserId(window.localStorage.getItem('userId'));
-    setUserType(window.localStorage.getItem('userType'));
-  }, []);
+        localStorage.setItem('authToken', authToken);
+        localStorage.setItem('name', name);
+        localStorage.setItem('authTokenType', authTokenType);
+        localStorage.setItem('username', username);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('userType', userType);
 
-  useEffect(() => {
-    localStorage.setItem('authToken', authToken) 
-    localStorage.setItem('authTokenType', authTokenType)
-    localStorage.setItem('userId', userId)
-    localStorage.setItem('username', username);
-    localStorage.setItem('userTye', userType)
-  }, [authToken, authTokenType, userId, userType, username]);
-  
+        setError('');
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err);
+      });
+  };
 
-
-  const signIn = (e) => {
+  const signIn = async (e) => {
     e?.preventDefault();
 
     let formData = new FormData();
@@ -61,11 +82,19 @@ function App() {
       })
       .then((data) => {
         setAuthToken(data.access_token);
+        setName(data.name);
         setAuthTokenType(data.token_type);
         setUserId(data.user_id);
-        setUserType(data.user_type);
         setUsername(data.username);
-        setName(data.name);
+        setUserType(data.user_type);
+
+        localStorage.setItem('authToken', data.access_token);
+        localStorage.setItem('name', data.name);
+        localStorage.setItem('authTokenType', data.token_type);
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('userId', data.user_id);
+        localStorage.setItem('userType', data.user_type);
+
         setError('');
       })
       .catch((err) => {
@@ -73,43 +102,78 @@ function App() {
       });
   };
 
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+
+    if (authToken) {
+      setAuthToken(localStorage.getItem('authToken'));
+      setName(localStorage.getItem('name'));
+      setAuthTokenType(localStorage.getItem('authTokenType'));
+      setUsername(localStorage.getItem('username'));
+      setUserId(localStorage.getItem('userId'));
+      setUserType(localStorage.getItem('userType'));
+    }
+  }, []);
+
   const logOut = (e) => {
-    setAuthToken(null);
-    setAuthTokenType(null);
-    setUserId('');
-    setUserType('');
-    setUsername('');
-    setName('');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('name');
+    localStorage.removeItem('authTokenType');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+    setAuthToken('');
   };
 
-  return (
-    <div className='container'>
-      <Navbar
-        authToken={authToken}
-        name={name}
-        logOut={logOut}
-      />
-
-      {authToken ? (
-        <div>
+  if (authToken) {
+    return (
+      <div className='container'>
+        <Router>
+          <Navbar
+            authToken={authToken}
+            name={name}
+            logOut={logOut}
+          />
           <Expenditure
             authToken={authToken}
             authTokenType={authTokenType}
           />
-        </div>
-      ) : (
-        <>
-          <SignIn
-            username={username}
-            setPassword={setPassword}
-            signIn={signIn}
-            setUsername={setUsername}
-            error={error}
-          />
-          <SignUp />
-        </>
-      )}
-    </div>
+        </Router>
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <div className='container'>
+        <Navbar />
+        <Routes>
+          <Route
+            exact
+            path='/'
+            element={<HomePage />}
+          ></Route>
+          <Route
+            exact
+            path='/sign-in'
+            element={
+              <SignIn
+                username={username}
+                setPassword={setPassword}
+                signIn={signIn}
+                setUsername={setUsername}
+                error={error}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/sign-up'
+            element={<SignUp directLogin={directLogin} />}
+          ></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -23,7 +23,7 @@ const SignIn = ({
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label for='username'>Email address or Username</label>
+          <label htmlFor='username'>Email address or Username</label>
         </div>
         <div className='form-floating'>
           <input
@@ -35,7 +35,7 @@ const SignIn = ({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <label for='current-password'>Password</label>
+          <label htmlFor='current-password'>Password</label>
         </div>
         <p className='text-danger'>
           {error && 'Incorrect Password or Username'}

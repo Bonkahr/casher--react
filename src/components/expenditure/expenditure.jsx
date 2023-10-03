@@ -6,6 +6,7 @@ import Expend from './expend';
 import './expenditure.scss';
 
 const Expenditure = ({ authToken, authTokenType }) => {
+
   const BaseUrl = 'http://127.0.0.1:8000/';
 
   const [expenditures, setExpenditures] = useState([]);
@@ -30,7 +31,9 @@ const Expenditure = ({ authToken, authTokenType }) => {
         setExpenditures(data);
       })
       .catch((e) => {});
-  });
+  }, []);
+
+  console.log('Im rendering............................');
 
   return (
     <div>

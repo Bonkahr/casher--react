@@ -17,17 +17,17 @@ const Expend = ({ expenditures }) => {
   //   })
   // }, [])
 
-  let totalCredit = 0
-  credit.forEach(el => {
-    totalCredit += el
-  });
+  // let totalCredit = 0
+  // credit.forEach(el => {
+  //   totalCredit += el
+  // });
 
-  let totalExpenses = 0
-  expenses.forEach((el) => {
-    totalExpenses += el
-  })
+  // let totalExpenses = 0
+  // expenses.forEach((el) => {
+  //   totalExpenses += el
+  // })
 
-  let moneyAtHand = totalCredit - totalExpenses;
+  // let moneyAtHand = totalCredit - totalExpenses;
 
 
 
