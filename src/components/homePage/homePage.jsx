@@ -10,7 +10,7 @@ const HomePage = () => {
         </h1>
         <div className='col-lg-6 mx-auto'>
           <p className='lead mb-4'>
-            This app will help you manage you money as you get them. Using this
+            This app will help you manage your money as you get them. Using this
             app you will be able to record your expenditures and credits. You
             will be able to remember exactly how you used your monies.
           </p>

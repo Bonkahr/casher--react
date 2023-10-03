@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import './signUp.scss';
 
-const SignUp = ({ directLogin }) => {
+const SignUp = ({ directLogin, BaseUrl }) => {
   const [firstname, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -11,8 +11,6 @@ const SignUp = ({ directLogin }) => {
   const [password, setPassword] = useState('');
   const [confrimPassword, setConfirmPassword] = useState('');
   const [profilePic, setProfilePic] = useState(null);
-
-  const BaseUrl = 'http://127.0.0.1:8000/';
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {

@@ -127,7 +127,7 @@ function App() {
 
   if (authToken) {
     return (
-      <div className='container'>
+      <div className='container app'>
         <Router>
           <Navbar
             authToken={authToken}
@@ -136,7 +136,8 @@ function App() {
           />
           <Expenditure
             authToken={authToken}
-            authTokenType={authTokenType}
+            authTokenType={ authTokenType }
+            BaseUrl={BaseUrl}
           />
         </Router>
       </div>
@@ -145,7 +146,7 @@ function App() {
 
   return (
     <Router>
-      <div className='container'>
+      <div className='container app'>
         <Navbar />
         <Routes>
           <Route
@@ -169,7 +170,12 @@ function App() {
           <Route
             exact
             path='/sign-up'
-            element={<SignUp directLogin={directLogin} />}
+            element={
+              <SignUp
+                directLogin={directLogin}
+                BaseUrl={BaseUrl}
+              />
+            }
           ></Route>
         </Routes>
       </div>

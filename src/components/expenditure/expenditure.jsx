@@ -2,12 +2,11 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 
 import Expend from './expend';
+import NewExpenditure from '../newExpenditure/newExpenditure';
 
 import './expenditure.scss';
 
-const Expenditure = ({ authToken, authTokenType }) => {
-
-  const BaseUrl = 'http://127.0.0.1:8000/';
+const Expenditure = ({ authToken, authTokenType, BaseUrl }) => {
 
   const [expenditures, setExpenditures] = useState([]);
 
@@ -33,11 +32,10 @@ const Expenditure = ({ authToken, authTokenType }) => {
       .catch((e) => {});
   }, []);
 
-  console.log('Im rendering............................');
-
   return (
     <div>
       <Expend expenditures={expenditures} />
+      <NewExpenditure />
     </div>
   );
 };
