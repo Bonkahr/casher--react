@@ -7,7 +7,6 @@ import NewExpenditure from '../newExpenditure/newExpenditure';
 import './expenditure.scss';
 
 const Expenditure = ({ authToken, authTokenType, BaseUrl }) => {
-
   const [expenditures, setExpenditures] = useState([]);
 
   const requestOptions = {
@@ -34,8 +33,18 @@ const Expenditure = ({ authToken, authTokenType, BaseUrl }) => {
 
   return (
     <div>
-      <Expend expenditures={expenditures} />
-      <NewExpenditure />
+      { expenditures.length > 0 &&
+        <Expend
+          expenditures={ expenditures }
+          BaseUrl={ BaseUrl }
+          authToken={ authToken }
+          authTokenType={ authTokenType }
+        />
+      }
+      <NewExpenditure
+        authToken={authToken}
+        authTokenType={authTokenType}
+      />
     </div>
   );
 };

@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 
 import './newExpenditure.scss';
 
-const NewExpenditure = (BaseUrl, authToken, authTokenType) => {
+const NewExpenditure = ({ authToken, authTokenType }) => {
+  const BaseUrl = 'http://127.0.0.1:8000/';
+
   const [moneyType, setMoneyType] = useState('');
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
+
+  const [error, setError] = useState('');
 
   const handleMoneyType = (e) => {
     setMoneyType(e.target.value);
@@ -27,18 +31,14 @@ const NewExpenditure = (BaseUrl, authToken, authTokenType) => {
   const handleSubmit = (e) => {
     e?.preventDefault();
 
-    // const formData = new FormData();
-    // formData.append();
-    // formData.append();
-    // formData.append();
-    // formData.append()
-
     const jsonString = JSON.stringify({
       money_type: moneyType,
       amount: amount,
       description: description,
       paid_on: date,
     });
+
+    console.log(jsonString);
 
     const requestOptions = {
       method: 'POST',
@@ -57,13 +57,16 @@ const NewExpenditure = (BaseUrl, authToken, authTokenType) => {
         throw res;
       })
       .then((data) => {
-        console.log(data);
+        window.location.reload();
+        setError('');
       })
       .catch((err) => {
+        setAmount(0);
+        setDate('');
+        setDescription('');
+        setMoneyType('');
+        setError('Error in your document');
         console.log(err);
-      })
-      .finally(() => {
-        window.scrollTo(0, 0);
       });
   };
 
@@ -82,11 +85,12 @@ const NewExpenditure = (BaseUrl, authToken, authTokenType) => {
             className='form-select'
             id='state'
             required=''
-            value={moneyType}
+            defaultValue={moneyType}
             onChange={handleMoneyType}
           >
-            <option>credit</option>
-            <option>expense</option>
+            <option>Choose...</option>
+            <option value='credit'>credit</option>
+            <option value='expense'>expense</option>
           </select>
         </div>
 
@@ -140,6 +144,12 @@ const NewExpenditure = (BaseUrl, authToken, authTokenType) => {
           />
           <i className='fas fa-calendar input-prefix'></i>
         </div>
+
+        {error && (
+          <div className='error'>
+            <h5 className='text-danger'>{error}</h5>
+          </div>
+        )}
 
         <button
           className='btn btn-primary margin-sm'

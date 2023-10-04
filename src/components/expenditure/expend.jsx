@@ -1,6 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const Expend = ({ expenditures }) => {
+import Exp from './exp';
+
+const Expend = ({ expenditures, BaseUrl, authToken, authTokenType }) => {
+
+  const [ credits, setCredits ] = useState(0);
+  const [ expenses, setExpenses ] = useState(0);
+  const [ totalTransaction, setTotalTransaction ] = useState(0);
+  const [moneyAtHand, setMoneyAtHand] = useState(0)
+
+  const requestOptions = {
+    method: 'GET',
+    headers: new Headers({
+      Authorization: authTokenType + ' ' + authToken,
+      'Content-Type': 'application/json',
+    }),
+  };
+
+    fetch(BaseUrl + 'expenditure/transactions', requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((data) => {
+        setCredits(data.total_credits);
+        setExpenses(data.total_expenses);
+        setTotalTransaction(data.total_transaction);
+        setMoneyAtHand(data.money_at_hand);
+      })
+      .catch((e) => {});
+
   return (
     <div>
       <table className='table'>
@@ -25,65 +56,74 @@ const Expend = ({ expenditures }) => {
           </tr>
 
           {expenditures.map((expenditure) => (
-            <tr key={expenditure.id}>
-              <td>{expenditure.money_type}</td>
-              <td>{expenditure.amount}</td>
-              <td colSpan='2'>{expenditure.description}</td>
-              <td>{expenditure.paid_on}</td>
-              <td>{expenditure.timestamp}</td>
-              <td className='btn-col'>
-                <button className='btn btn-outline-warning'>Modify</button>
-                <button className='btn btn-outline-danger'>Delete</button>
-              </td>
-            </tr>
+            <Exp
+              key={expenditure.id}
+              expenditure={expenditure}
+              authToken={authToken}
+              authTokenType={authTokenType}
+              BaseUrl={BaseUrl}
+            />
           ))}
         </tbody>
       </table>
+
       <table className='table'>
         <tbody>
           <tr className='tr-main'>
             <td
-              className='table-active'
+              className='table-active text-info'
               colSpan='2'
             >
-              Totals Credits
+              Total Transactions
             </td>
             <td
-              className='table-active'
+              className='table-active text-info'
               colSpan='2'
-            ></td>
-          </tr>
-        </tbody>
-      </table>
-      <table className='table'>
-        <tbody>
-          <tr className='tr-main'>
-            <td
-              className='table-active'
-              colSpan='3'
             >
-              Totals Expediture
+              Total Credits
             </td>
             <td
-              className='table-active'
+              className='table-active text-info'
               colSpan='2'
-            ></td>
-          </tr>
-        </tbody>
-      </table>
-      <table className='table'>
-        <tbody>
-          <tr className='tr-main'>
+            >
+              Total Expediture
+            </td>
+
             <td
-              className='table-active'
-              colSpan='3'
+              className='table-active text-info'
+              colSpan='2'
             >
               Money at Hand
             </td>
+          </tr>
+
+          <tr>
             <td
               className='table-active'
               colSpan='2'
-            ></td>
+            >
+              {totalTransaction}
+            </td>
+            <td
+              className='table-active'
+              colSpan='2'
+            >
+              {credits}
+            </td>
+
+            <td
+              className='table-active'
+              colSpan='2'
+            >
+              {expenses}
+            </td>
+
+            <td
+              className='table-active'
+              colSpan='2'
+            >
+              {moneyAtHand}
+            </td>
           </tr>
         </tbody>
       </table>

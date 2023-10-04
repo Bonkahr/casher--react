@@ -8,6 +8,7 @@ import Navbar from './components/navbar/navbar-component';
 import SignIn from './components/signIn/signIn';
 import SignUp from './components/signUp/signUp';
 import Expenditure from './components/expenditure/expenditure';
+import Profile from './components/profile/profile';
 
 function App() {
   const BaseUrl = 'http://127.0.0.1:8000/';
@@ -26,6 +27,7 @@ function App() {
     let formData = new FormData();
     formData.append('username', username);
     formData.append('password', password);
+
     const requestOptions = {
       method: 'POST',
       body: formData,
@@ -52,6 +54,9 @@ function App() {
         localStorage.setItem('username', username);
         localStorage.setItem('userId', userId);
         localStorage.setItem('userType', userType);
+
+        const now = new Date();
+        localStorage.setItem('authTime', now.getTime());
 
         setError('');
       })
@@ -95,6 +100,9 @@ function App() {
         localStorage.setItem('userId', data.user_id);
         localStorage.setItem('userType', data.user_type);
 
+        const now = new Date();
+        localStorage.setItem('authTime', now.getTime());
+
         setError('');
       })
       .catch((err) => {
@@ -104,14 +112,19 @@ function App() {
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
+    const now = new Date();
 
     if (authToken) {
-      setAuthToken(localStorage.getItem('authToken'));
-      setName(localStorage.getItem('name'));
-      setAuthTokenType(localStorage.getItem('authTokenType'));
-      setUsername(localStorage.getItem('username'));
-      setUserId(localStorage.getItem('userId'));
-      setUserType(localStorage.getItem('userType'));
+      if (now.getTime() - localStorage.getItem('authTime') > 36000000) {
+        logOut();
+      } else {
+        setAuthToken(localStorage.getItem('authToken'));
+        setName(localStorage.getItem('name'));
+        setAuthTokenType(localStorage.getItem('authTokenType'));
+        setUsername(localStorage.getItem('username'));
+        setUserId(localStorage.getItem('userId'));
+        setUserType(localStorage.getItem('userType'));
+      }
     }
   }, []);
 
@@ -136,9 +149,16 @@ function App() {
           />
           <Expenditure
             authToken={authToken}
-            authTokenType={ authTokenType }
+            authTokenType={authTokenType}
             BaseUrl={BaseUrl}
           />
+          <Routes>
+            <Route
+              exact
+              path='/profile'
+              element={<Profile />}
+            ></Route>
+          </Routes>
         </Router>
       </div>
     );

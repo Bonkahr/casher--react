@@ -61,9 +61,6 @@ const SignUp = ({ directLogin, BaseUrl }) => {
         throw res;
       })
       .then((data) => {
-        console.log('Data:' + data);
-        console.log('file name:' + data.filename);
-        console.log('calling create profile function');
         createProfile(data.filename);
       })
       .catch((err) => {
