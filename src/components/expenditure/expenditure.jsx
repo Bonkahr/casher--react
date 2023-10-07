@@ -2,11 +2,10 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 
 import Expend from './expend';
-import NewExpenditure from '../newExpenditure/newExpenditure';
 
 import './expenditure.scss';
 
-const Expenditure = ({ authToken, authTokenType, BaseUrl }) => {
+const Expenditure = ({ authToken, authTokenType, BaseUrl, navigate }) => {
   const [expenditures, setExpenditures] = useState([]);
 
   const requestOptions = {
@@ -31,22 +30,32 @@ const Expenditure = ({ authToken, authTokenType, BaseUrl }) => {
       .catch((e) => {});
   }, []);
 
-  return (
-    <div>
-      { expenditures.length > 0 &&
-        <Expend
-          expenditures={ expenditures }
-          BaseUrl={ BaseUrl }
-          authToken={ authToken }
-          authTokenType={ authTokenType }
-        />
-      }
-      <NewExpenditure
-        authToken={authToken}
-        authTokenType={authTokenType}
-      />
-    </div>
-  );
+  const handleAddExpenditure = () => {
+    navigate('/new-expenditure');
+  };
+
+  if (authToken) {
+    return (
+      <div>
+        { expenditures.length > 0 && (
+          <Expend
+            expenditures={ expenditures }
+            BaseUrl={ BaseUrl }
+            authToken={ authToken }
+            authTokenType={ authTokenType }
+            navigate={ navigate }
+          />
+        ) }
+
+        <button
+          className='btn btn-outline-primary'
+          onClick={ handleAddExpenditure }
+        >
+          Add an Expenditure
+        </button>
+      </div>
+    );
+  }
 };
 
 export default Expenditure;

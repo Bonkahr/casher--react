@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Exp = ({ expenditure, BaseUrl, authToken, authTokenType }) => {
+const Exp = ({ expenditure, BaseUrl, authToken, authTokenType, navigate}) => {
   
   const t_a = expenditure.time_stamp.split(/[-T:]/);
 
@@ -31,7 +31,9 @@ const Exp = ({ expenditure, BaseUrl, authToken, authTokenType }) => {
   };
 
 
-  const handleModify = () => {};
+  const handleModify = () => {
+    navigate('/edit-expenditure')
+  };
 
   return (
     <tr key={expenditure.id}>

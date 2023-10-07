@@ -3,20 +3,14 @@ import { useState } from 'react';
 
 import './signUp.scss';
 
-const SignUp = ({ directLogin, BaseUrl }) => {
+const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
   const [firstname, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confrimPassword, setConfirmPassword] = useState('');
-  const [profilePic, setProfilePic] = useState(null);
-
-  const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      setProfilePic(e.target.files[0]);
-    }
-  };
+  const [ confrimPassword, setConfirmPassword ] = useState('');
+  const [ error, setError ] = useState('');
 
   const firstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -42,29 +36,44 @@ const SignUp = ({ directLogin, BaseUrl }) => {
     setConfirmPassword(e.target.value);
   };
 
-  const handleUpload = (e) => {
+  const handleRegister = (e) => {
     e?.preventDefault();
 
-    const formData = new FormData();
-    formData.append('image', profilePic);
+    if (password !== confrimPassword) {
+      alert('Passwords must be the same.');
+      return;
+    }
 
+    const jsonString = JSON.stringify({
+      first_name: firstname,
+      last_name: lastName,
+      username: username,
+      email: email,
+      password: password,
+      user_image_url: `${username}.jpeg`,
+      user_type: '',
+    });
     const requestOptions = {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonString,
     };
 
-    fetch(BaseUrl + 'user/image', requestOptions)
+    fetch(BaseUrl + 'user/new', requestOptions)
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
         throw res;
       })
-      .then((data) => {
-        createProfile(data.filename);
+      .then(() => {
+        // directLogin(username, password)
+        navigate('/sign-in')
       })
       .catch((err) => {
-        console.log(err);
+        setError(`Email or username already in use.`)
       })
       .finally(() => {
         setEmail('');
@@ -73,165 +82,117 @@ const SignUp = ({ directLogin, BaseUrl }) => {
         setPassword('');
         setConfirmPassword('');
         setUsername('');
-        setProfilePic(null);
-        document.getElementById('profilePicture').value = null;
       });
-
-    const createProfile = (imageUrl) => {
-      if (password !== confrimPassword) {
-        alert('Passwords must be the same.');
-        return;
-      }
-
-      const jsonString = JSON.stringify({
-        first_name: firstname,
-        last_name: lastName,
-        username: username,
-        email: email,
-        password: password,
-        user_image_url: imageUrl,
-        user_type: '',
-      });
-
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonString,
-      };
-
-      fetch(BaseUrl + 'user/new', requestOptions)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
-        .then((data) => {
-          directLogin(username, password);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
   };
 
-  return (
-    <div className='signin-form'>
-      <form>
-        <h1 className='h3 mb-3 fw-normal'>Kindly register to continue</h1>
-        <div className='form-floating'>
-          <input
-            name='first_name'
-            type='text'
-            className='form-control'
-            id='first_name'
-            placeholder='sam'
-            value={firstname}
-            onChange={firstNameChange}
-            required
-          />
-          <label htmlFor='first_name'>First Name</label>
-        </div>
-        <div className='form-floating'>
-          <input
-            type='text'
-            className='form-control'
-            id='last_name'
-            placeholder='sam'
-            value={lastName}
-            onChange={lastNameChange}
-            required
-          />
-          <label htmlFor='floatingInput'>Last Name</label>
-        </div>
-
-        <div className='form-floating'>
-          <input
-            type='text'
-            className='form-control'
-            id='username'
-            placeholder='sam1234'
-            value={username}
-            onChange={usernameChange}
-            required
-          />
-          <label htmlFor='floatingInput'>Username</label>
-        </div>
-
-        <div className='form-floating'>
-          <input
-            type='email'
-            className='form-control'
-            id='email'
-            value={email}
-            placeholder='sam1@email.com'
-            onChange={emailChange}
-            required
-          />
-          <label htmlFor='floatingInput'>Email address</label>
-        </div>
-
-        <div className='form-floating'>
-          <input
-            type='password'
-            className='form-control'
-            id='password'
-            placeholder='Password'
-            suggested='new-password'
-            value={password}
-            onChange={passwordChange}
-            required
-          />
-          <label htmlFor='floatingPassword'>Password</label>
-        </div>
-
-        {password !== confrimPassword && (
-          <div>
-            <p className='text-danger'>Password are not the same</p>
+  if (!authToken) {
+    return (
+      <div className='signin-form'>
+        <form>
+          <h1 className='h3 mb-3 fw-normal'>Kindly register to continue</h1>
+          <div className='form-floating'>
+            <input
+              name='first_name'
+              type='text'
+              className='form-control'
+              id='first_name'
+              placeholder='sam'
+              value={ firstname }
+              onChange={ firstNameChange }
+              required
+            />
+            <label htmlFor='first_name'>First Name</label>
           </div>
-        )}
+          <div className='form-floating'>
+            <input
+              type='text'
+              className='form-control'
+              id='last_name'
+              placeholder='sam'
+              value={ lastName }
+              onChange={ lastNameChange }
+              required
+            />
+            <label htmlFor='floatingInput'>Last Name</label>
+          </div>
 
-        <div className='form-floating'>
-          <input
-            type='password'
-            className='form-control'
-            id='confirm_password'
-            placeholder='Password'
-            suggested='new-password'
-            value={confrimPassword}
-            onChange={confirmPasswordChange}
-            required
-          />
-          <label htmlFor='floatingPassword'>Confirm Password</label>
-        </div>
+          <div className='form-floating'>
+            <input
+              type='text'
+              className='form-control'
+              id='username'
+              placeholder='sam1234'
+              value={ username }
+              onChange={ usernameChange }
+              required
+            />
+            <label htmlFor='floatingInput'>Username</label>
+          </div>
 
-        <div className='orm-floating'>
-          <label
-            htmlFor='profile_picture'
-            className='form-label'
+          <div className='form-floating'>
+            <input
+              type='email'
+              className='form-control'
+              id='email'
+              value={ email }
+              placeholder='sam1@email.com'
+              onChange={ emailChange }
+              required
+            />
+            <label htmlFor='floatingInput'>Email address</label>
+          </div>
+
+          <div className='form-floating'>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              placeholder='Password'
+              suggested='new-password'
+              value={ password }
+              onChange={ passwordChange }
+              required
+            />
+            <label htmlFor='floatingPassword'>Password</label>
+          </div>
+
+          { password !== confrimPassword && (
+            <div>
+              <p className='text-danger'>Password are not the same</p>
+            </div>
+          ) }
+
+          <div className='form-floating'>
+            <input
+              type='password'
+              className='form-control'
+              id='confirm_password'
+              placeholder='Password'
+              suggested='new-password'
+              value={ confrimPassword }
+              onChange={ confirmPasswordChange }
+              required
+            />
+            <label htmlFor='floatingPassword'>Confirm Password</label>
+          </div>
+          { error && (
+            <div>
+              <p className='text-danger'>{ error }</p>
+            </div>
+          ) }
+          <button
+            className='btn btn-primary w-100 py-2'
+            type='submit'
+            onClick={ handleRegister }
           >
-            Upload your profile picture
-          </label>
-          <input
-            className='form-control'
-            type='file'
-            id='profilePicture'
-            onChange={handleFileChange}
-            required
-          />
-        </div>
-        <button
-          className='btn btn-primary w-100 py-2'
-          type='submit'
-          onClick={handleUpload}
-        >
-          Register
-        </button>
-      </form>
-    </div>
-  );
+            Register
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  navigate('/expenditures')
 };
 
 export default SignUp;

@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.scss';
 
 import HomePage from './components/homePage/homePage';
+import About from './components/homePage/about';
 import Navbar from './components/navbar/navbar-component';
 import SignIn from './components/signIn/signIn';
 import SignUp from './components/signUp/signUp';
 import Expenditure from './components/expenditure/expenditure';
+import NewExpenditure from './components/newExpenditure/newExpenditure';
 import Profile from './components/profile/profile';
+import EditImage from './components/editProfile/editImage';
+import DeleteProfile from './components/editProfile/deleteProfile';
+import Admin from './components/admin/admin';
 
 function App() {
   const BaseUrl = 'http://127.0.0.1:8000/';
@@ -23,48 +29,54 @@ function App() {
   const [username, setUsername] = useState('');
   const [userType, setUserType] = useState('');
 
-  const directLogin = (username, password) => {
-    let formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
+  const [imageUrl, setImageUrl] = useState('');
+  const [createdOn, setCreatedOn] = useState('');
 
-    const requestOptions = {
-      method: 'POST',
-      body: formData,
-    };
+  const navigate = useNavigate();
 
-    fetch(BaseUrl + 'login', requestOptions)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        setAuthToken(data.access_token);
-        setName(data.name);
-        setAuthTokenType(data.token_type);
-        setUserId(data.user_id);
-        setUsername(data.username);
-        setUserType(data.user_type);
+  // const directLogin = (username, password) => {
+  //   let formData = new FormData();
+  //   formData.append('username', username);
+  //   formData.append('password', password);
 
-        localStorage.setItem('authToken', authToken);
-        localStorage.setItem('name', name);
-        localStorage.setItem('authTokenType', authTokenType);
-        localStorage.setItem('username', username);
-        localStorage.setItem('userId', userId);
-        localStorage.setItem('userType', userType);
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     body: formData,
+  //   };
 
-        const now = new Date();
-        localStorage.setItem('authTime', now.getTime());
+  //   fetch(BaseUrl + 'login', requestOptions)
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         return res.json();
+  //       }
+  //       throw res;
+  //     })
+  //     .then((data) => {
+  //       setAuthToken(data.access_token);
+  //       setName(data.name);
+  //       setAuthTokenType(data.token_type);
+  //       setUserId(data.user_id);
+  //       setUsername(data.username);
+  //       setUserType(data.user_type);
+  //       setAuthTokenType(data.created_on);
 
-        setError('');
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err);
-      });
-  };
+  //       localStorage.setItem('authToken', authToken);
+  //       localStorage.setItem('name', name);
+  //       localStorage.setItem('authTokenType', authTokenType);
+  //       localStorage.setItem('username', username);
+  //       localStorage.setItem('userId', userId);
+  //       localStorage.setItem('userType', userType);
+
+  //       const now = new Date();
+  //       localStorage.setItem('authTime', now.getTime());
+
+  //       setError('');
+  //       navigate('/expenditures')
+  //     })
+  //     .catch((err) => {
+  //       setError(err);
+  //     });
+  // };
 
   const signIn = async (e) => {
     e?.preventDefault();
@@ -103,12 +115,36 @@ function App() {
         const now = new Date();
         localStorage.setItem('authTime', now.getTime());
 
+        navigate('/expenditures');
+
         setError('');
       })
       .catch((err) => {
         setError(err);
       });
   };
+
+  if (authToken) {
+    const requestOptions = {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: authTokenType + ' ' + authToken,
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    fetch(BaseUrl + `user/${username}`, requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((data) => {
+        setCreatedOn(data.created_on);
+        setImageUrl(data.user_image_url);
+      });
+  }
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
@@ -124,6 +160,7 @@ function App() {
         setUsername(localStorage.getItem('username'));
         setUserId(localStorage.getItem('userId'));
         setUserType(localStorage.getItem('userType'));
+        localStorage.setItem('authTime', now.getTime());
       }
     }
   }, []);
@@ -136,43 +173,117 @@ function App() {
     localStorage.removeItem('userId');
     localStorage.removeItem('userType');
     setAuthToken('');
+    navigate('/');
   };
 
-  if (authToken) {
-    return (
-      <div className='container app'>
-        <Router>
+  return (
+    <>
+      <header>
+        {authToken ? (
           <Navbar
             authToken={authToken}
             name={name}
             logOut={logOut}
+            userType={userType}
           />
-          <Expenditure
-            authToken={authToken}
-            authTokenType={authTokenType}
-            BaseUrl={BaseUrl}
-          />
-          <Routes>
-            <Route
-              exact
-              path='/profile'
-              element={<Profile />}
-            ></Route>
-          </Routes>
-        </Router>
-      </div>
-    );
-  }
-
-  return (
-    <Router>
-      <div className='container app'>
-        <Navbar />
+        ) : (
+          <Navbar />
+        )}
+      </header>
+      <main className='container app'>
         <Routes>
           <Route
             exact
             path='/'
             element={<HomePage />}
+          ></Route>
+
+          <Route
+            exact
+            path='/about'
+            element={<About />}
+          ></Route>
+          <Route
+            exact
+            path='/expenditures'
+            element={
+              <Expenditure
+                authToken={authToken}
+                authTokenType={authTokenType}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/new-expenditure'
+            element={
+              <NewExpenditure
+                authToken={authToken}
+                authTokenType={authTokenType}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/profile'
+            element={
+              <Profile
+                name={name}
+                username={username}
+                userType={userType}
+                imageUrl={imageUrl}
+                createdOn={createdOn}
+                BaseUrl={BaseUrl}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/edit-profile'
+            element={
+              <EditImage
+                authToken={authToken}
+                authTokenType={authTokenType}
+                name={name}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/delete-profile'
+            element={
+              <DeleteProfile
+                authToken={authToken}
+                authTokenType={authTokenType}
+                name={name}
+                userId={userId}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+                userType={userType}
+                logOut={logOut}
+              />
+            }
+          ></Route>
+          <Route
+            exact
+            path='/admin'
+            element={
+              <Admin
+                authToken={authToken}
+                authTokenType={authTokenType}
+                name={name}
+                userId={userId}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+                userType={userType}
+              />
+            }
           ></Route>
           <Route
             exact
@@ -184,6 +295,8 @@ function App() {
                 signIn={signIn}
                 setUsername={setUsername}
                 error={error}
+                authToken={authToken}
+                navigate={navigate}
               />
             }
           ></Route>
@@ -192,14 +305,16 @@ function App() {
             path='/sign-up'
             element={
               <SignUp
-                directLogin={directLogin}
+                // directLogin={directLogin}
                 BaseUrl={BaseUrl}
+                navigate={navigate}
+                authToken={authToken}
               />
             }
           ></Route>
         </Routes>
-      </div>
-    </Router>
+      </main>
+    </>
   );
 }
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import Exp from './exp';
 
-const Expend = ({ expenditures, BaseUrl, authToken, authTokenType }) => {
+const Expend = ({ expenditures, BaseUrl, authToken, authTokenType, navigate}) => {
 
   const [ credits, setCredits ] = useState(0);
   const [ expenses, setExpenses ] = useState(0);
@@ -61,7 +61,8 @@ const Expend = ({ expenditures, BaseUrl, authToken, authTokenType }) => {
               expenditure={expenditure}
               authToken={authToken}
               authTokenType={authTokenType}
-              BaseUrl={BaseUrl}
+              BaseUrl={ BaseUrl }
+              navigate={navigate}
             />
           ))}
         </tbody>

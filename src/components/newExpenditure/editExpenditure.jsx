@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import './newExpenditure.scss';
 
-const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
+const EditExpenditure = ({ authToken, authTokenType, navigate }) => {
   const BaseUrl = 'http://127.0.0.1:8000/';
 
   const [moneyType, setMoneyType] = useState('');
@@ -55,15 +55,15 @@ const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
         throw res;
       })
       .then((data) => {
-        setError('');
         navigate('/expenditures');
+        setError('');
       })
       .catch((err) => {
         setAmount(0);
         setDate('');
         setDescription('');
         setMoneyType('');
-        setError('Error in your document/ NOT AUTHENTICATED');
+        setError('Error in your document');
       });
   };
 
@@ -132,7 +132,7 @@ const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
         >
           <label htmlFor='paid-on'>Transacted on: </label>
           <input
-            placeholder='DD-MM-YYYY (23-12-2022)'
+            placeholder='DD-MM-YYY (27-09-2022)'
             type='text'
             id='example'
             className='form-control'
@@ -160,4 +160,4 @@ const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
   );
 };
 
-export default NewExpenditure;
+export default EditExpenditure;

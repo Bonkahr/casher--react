@@ -1,21 +1,41 @@
 import React from 'react';
+
 import { Link } from 'react-router-dom';
 
 import './navbar-component.scss';
 
-const Navbar = ({ authToken, name, logOut }) => {
+const Navbar = ({ authToken, name, logOut, userType }) => {
   return (
     <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom'>
       <ul className='nav col-12 col-md-auto mb-2 justify-content-center mb-md-0'>
+        {authToken ? (
+          <Link
+            to='/expenditures'
+            className='nav-link px-2 link-secondary'
+          >
+            CASHER
+          </Link>
+        ) : (
           <Link
             to='/'
             className='nav-link px-2 link-secondary'
           >
             CASHER
           </Link>
+        )}
+
+        {userType === 'admin' && (
+          <Link
+            to='/admin'
+            className='nav-link px-2 link-primary'
+          >
+            Admin
+          </Link>
+        )}
+
         <li>
           <a
-            href='h'
+            href='/about'
             className='nav-link px-2'
           >
             About
@@ -40,7 +60,7 @@ const Navbar = ({ authToken, name, logOut }) => {
             Logout
           </button>
         </div>
-      )}
+        ) }
     </header>
   );
 };
