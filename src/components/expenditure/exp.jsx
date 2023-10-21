@@ -25,7 +25,7 @@ const Exp = ({ expenditure, BaseUrl, authToken, authTokenType, navigate}) => {
       .catch(err => {
         alert('Not allowed')
       })
-      .finally(() => {
+      .then(() => {
         window.location.reload()
     })
   };

@@ -104,6 +104,8 @@ function App() {
         setUserId(data.user_id);
         setUsername(data.username);
         setUserType(data.user_type);
+        setImageUrl(data.user_image_url);
+        setCreatedOn(data.created_on);
 
         localStorage.setItem('authToken', data.access_token);
         localStorage.setItem('name', data.name);
@@ -111,6 +113,8 @@ function App() {
         localStorage.setItem('username', data.username);
         localStorage.setItem('userId', data.user_id);
         localStorage.setItem('userType', data.user_type);
+        localStorage.setItem('userImageUrl', data.user_image_url);
+        localStorage.setItem('createdOn', createdOn);
 
         const now = new Date();
         localStorage.setItem('authTime', now.getTime());
@@ -124,27 +128,18 @@ function App() {
       });
   };
 
-  if (authToken) {
-    const requestOptions = {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: authTokenType + ' ' + authToken,
-        'Content-Type': 'application/json',
-      }),
-    };
-
-    fetch(BaseUrl + `user/${username}`, requestOptions)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        setCreatedOn(data.created_on);
-        setImageUrl(data.user_image_url);
-      });
-  }
+  const logOut = (e) => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('name');
+    localStorage.removeItem('authTokenType');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('createdOn');
+    localStorage.removeItem('userImageUrl');
+    setAuthToken('');
+    navigate('/');
+  };
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
@@ -159,22 +154,13 @@ function App() {
         setAuthTokenType(localStorage.getItem('authTokenType'));
         setUsername(localStorage.getItem('username'));
         setUserId(localStorage.getItem('userId'));
-        setUserType(localStorage.getItem('userType'));
+        setUserType(localStorage.getItem('userType'))
+        setCreatedOn(localStorage.getItem('createdOn'));
+        setImageUrl(localStorage.getItem('userImageUrl'))
         localStorage.setItem('authTime', now.getTime());
       }
     }
-  }, []);
-
-  const logOut = (e) => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('name');
-    localStorage.removeItem('authTokenType');
-    localStorage.removeItem('username');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userType');
-    setAuthToken('');
-    navigate('/');
-  };
+  }, []);  
 
   return (
     <>
@@ -196,13 +182,13 @@ function App() {
             exact
             path='/'
             element={<HomePage />}
-          ></Route>
+          />
 
           <Route
             exact
             path='/about'
             element={<About />}
-          ></Route>
+          />
           <Route
             exact
             path='/expenditures'
@@ -214,10 +200,10 @@ function App() {
                 navigate={navigate}
               />
             }
-          ></Route>
+          />
           <Route
             exact
-            path='/new-expenditure'
+            path='/expenditures/new-expenditure'
             element={
               <NewExpenditure
                 authToken={authToken}
@@ -226,7 +212,8 @@ function App() {
                 navigate={navigate}
               />
             }
-          ></Route>
+          />
+
           <Route
             exact
             path='/profile'
@@ -240,7 +227,7 @@ function App() {
                 BaseUrl={BaseUrl}
               />
             }
-          ></Route>
+          />
           <Route
             exact
             path='/edit-profile'
@@ -253,7 +240,7 @@ function App() {
                 navigate={navigate}
               />
             }
-          ></Route>
+          />
           <Route
             exact
             path='/delete-profile'
@@ -269,7 +256,7 @@ function App() {
                 logOut={logOut}
               />
             }
-          ></Route>
+          />
           <Route
             exact
             path='/admin'
@@ -284,7 +271,7 @@ function App() {
                 userType={userType}
               />
             }
-          ></Route>
+          />
           <Route
             exact
             path='/sign-in'
@@ -299,7 +286,7 @@ function App() {
                 navigate={navigate}
               />
             }
-          ></Route>
+          />
           <Route
             exact
             path='/sign-up'
@@ -311,7 +298,7 @@ function App() {
                 authToken={authToken}
               />
             }
-          ></Route>
+          />
         </Routes>
       </main>
     </>

@@ -6,6 +6,9 @@ import Expend from './expend';
 import './expenditure.scss';
 
 const Expenditure = ({ authToken, authTokenType, BaseUrl, navigate }) => {
+
+  // console.log('Auth token: ' + authToken + '\n Bearer: ' + authTokenType);
+
   const [expenditures, setExpenditures] = useState([]);
 
   const requestOptions = {
@@ -31,7 +34,7 @@ const Expenditure = ({ authToken, authTokenType, BaseUrl, navigate }) => {
   }, []);
 
   const handleAddExpenditure = () => {
-    navigate('/new-expenditure');
+    navigate('/expenditures/new-expenditure');
   };
 
   if (authToken) {

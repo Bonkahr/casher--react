@@ -34,6 +34,10 @@ const UserProfile = ({
       });
   };
 
+  const hnadleClick = () => {
+    //Todo handle paasword reset 
+  }
+
   return (
       <div className='p-5 text-center bg-body-tertiary rounded-3'>
         <img
@@ -59,17 +63,18 @@ const UserProfile = ({
             <a
               className='link-info link'
               href='..'
+              onClick={hnadleClick}
             >
               Mofify user type to delete user
             </a>
           </>
         )}
-        <a
+        <Link
           className='link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover link'
-          href='..'
+          to='/admin'
         >
           Reset user password.
-        </a>
+        </Link>
       </div>
   );
 };

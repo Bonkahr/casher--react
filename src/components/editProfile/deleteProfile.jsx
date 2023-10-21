@@ -11,30 +11,30 @@ const DeleteProfile = ({
 }) => {
   const [error, setError] = useState('');
 
-  const handleDelete = () => {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: new Headers({
-        Authorization: authTokenType + ' ' + authToken,
-      }),
-    };
+    const handleDelete = () => {
+      const requestOptions = {
+        method: 'DELETE',
+        headers: new Headers({
+          Authorization: authTokenType + ' ' + authToken,
+        }),
+      };
 
-    fetch(BaseUrl + `user/${userId}`, requestOptions)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        logOut()
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-        setError('Are you an ADMIN, I can not delete admin account.');
-      });
-  };
+      fetch(BaseUrl + `user/${userId}`, requestOptions)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw res;
+        })
+        .then((data) => {
+          logOut();
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+          setError('Are you an ADMIN, I can not delete admin account.');
+        });
+    };
 
   return (
     <div className='signin-form'>
