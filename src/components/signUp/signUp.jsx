@@ -9,8 +9,8 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [ confrimPassword, setConfirmPassword ] = useState('');
-  const [ error, setError ] = useState('');
+  const [confrimPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   const firstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -69,19 +69,17 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
         throw res;
       })
       .then(() => {
-        // directLogin(username, password)
-        navigate('/sign-in')
+        //Todo directLogin(username, password)
+        navigate('/sign-in');
       })
       .catch((err) => {
-        setError(`Email or username already in use.`)
-      })
-      .finally(() => {
-        setEmail('');
-        setFirstName('');
-        setLastName('');
-        setPassword('');
-        setConfirmPassword('');
-        setUsername('');
+        try {
+          err.json().then((errorData) => {
+            setError(errorData.detail);
+          });
+        } catch {
+          setError('Server error. Try agin later.');
+        }
       });
   };
 
@@ -97,8 +95,8 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               className='form-control'
               id='first_name'
               placeholder='sam'
-              value={ firstname }
-              onChange={ firstNameChange }
+              value={firstname}
+              onChange={firstNameChange}
               required
             />
             <label htmlFor='first_name'>First Name</label>
@@ -109,8 +107,8 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               className='form-control'
               id='last_name'
               placeholder='sam'
-              value={ lastName }
-              onChange={ lastNameChange }
+              value={lastName}
+              onChange={lastNameChange}
               required
             />
             <label htmlFor='floatingInput'>Last Name</label>
@@ -122,8 +120,8 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               className='form-control'
               id='username'
               placeholder='sam1234'
-              value={ username }
-              onChange={ usernameChange }
+              value={username}
+              onChange={usernameChange}
               required
             />
             <label htmlFor='floatingInput'>Username</label>
@@ -134,9 +132,9 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               type='email'
               className='form-control'
               id='email'
-              value={ email }
+              value={email}
               placeholder='sam1@email.com'
-              onChange={ emailChange }
+              onChange={emailChange}
               required
             />
             <label htmlFor='floatingInput'>Email address</label>
@@ -149,18 +147,18 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               id='password'
               placeholder='Password'
               suggested='new-password'
-              value={ password }
-              onChange={ passwordChange }
+              value={password}
+              onChange={passwordChange}
               required
             />
             <label htmlFor='floatingPassword'>Password</label>
           </div>
 
-          { password !== confrimPassword && (
+          {password !== confrimPassword && (
             <div>
               <p className='text-danger'>Password are not the same</p>
             </div>
-          ) }
+          )}
 
           <div className='form-floating'>
             <input
@@ -169,21 +167,21 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               id='confirm_password'
               placeholder='Password'
               suggested='new-password'
-              value={ confrimPassword }
-              onChange={ confirmPasswordChange }
+              value={confrimPassword}
+              onChange={confirmPasswordChange}
               required
             />
             <label htmlFor='floatingPassword'>Confirm Password</label>
           </div>
-          { error && (
+          {error && (
             <div>
-              <p className='text-danger'>{ error }</p>
+              <p className='text-danger'>{error}</p>
             </div>
-          ) }
+          )}
           <button
             className='btn btn-primary w-100 py-2'
             type='submit'
-            onClick={ handleRegister }
+            onClick={handleRegister}
           >
             Register
           </button>
@@ -192,7 +190,7 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
     );
   }
 
-  navigate('/expenditures')
+  navigate('/expenditures');
 };
 
 export default SignUp;

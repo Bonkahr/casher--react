@@ -13,19 +13,21 @@ const HomePage = () => {
             This app will help you manage your money as you get them. Using this
             app you will be able to record your expenditures and credits. You
             will be able to remember exactly how you used your monies.
+            For sales persons, the app will help you keep record of daily sales, commodities
+            sold on credit, transaction history and if need be, the record of your customers.
           </p>
           <div className='d-grid gap-2 d-sm-flex justify-content-sm-center'>
             <Link
               to='/sign-in'
               type='button'
-              className='btn btn-primary btn-lg px-4 gap-3'
+              className='btn btn-primary btn-md px-4 gap-3'
             >
               Login
             </Link>
             <Link
               to='/sign-up'
               type='button'
-              className='btn btn-info btn-lg px-4'
+              className='btn btn-info btn-md px-4'
             >
               Sign Up
             </Link>

@@ -9,6 +9,7 @@ const SignIn = ({
   password,
   setPassword,
   error,
+  response,
   authToken,
   navigate,
 }) => {
@@ -23,8 +24,8 @@ const SignIn = ({
               className='form-control'
               id='username'
               placeholder='name@example.com'
-              value={ username }
-              onChange={ (e) => setUsername(e.target.value) }
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <label htmlFor='username'>Email address or Username</label>
           </div>
@@ -35,18 +36,21 @@ const SignIn = ({
               id='current-password'
               placeholder='Password'
               suggested='current-password'
-              value={ password }
-              onChange={ (e) => setPassword(e.target.value) }
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label htmlFor='current-password'>Password</label>
           </div>
-          <p className='text-danger'>
-            { error && 'Incorrect Password or Username' }
-          </p>
+          <div>
+            <p className='text-danger'>
+              {response && response}
+              {error && error}
+            </p>
+          </div>
           <button
             className='btn btn-primary w-100 py-2'
             type='submit'
-            onClick={ signIn }
+            onClick={signIn}
           >
             Login
           </button>
@@ -54,9 +58,7 @@ const SignIn = ({
       </div>
     );
   }
-  
-  navigate('/expenditures')
-
+  navigate('/signed-home');
 };
 
 export default SignIn;

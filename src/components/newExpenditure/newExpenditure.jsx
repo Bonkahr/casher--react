@@ -59,11 +59,13 @@ const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
         navigate('/expenditures');
       })
       .catch((err) => {
-        setAmount(0);
-        setDate('');
-        setDescription('');
-        setMoneyType('');
-        setError('Error in your document/ NOT AUTHENTICATED');
+        try {
+          err.json().then((errorData) => {
+            setError(errorData.detail);
+          });
+        } catch {
+          setError('Server error. Try agin later.');
+        }
       });
   };
 
@@ -144,7 +146,7 @@ const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
 
         {error && (
           <div className='error'>
-            <h5 className='text-danger'>{error}</h5>
+            <p className='text-danger'>{error}</p>
           </div>
         )}
 

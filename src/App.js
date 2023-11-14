@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.scss';
 
 import HomePage from './components/homePage/homePage';
+import SignedHome from './components/homePage/signedHome';
 import About from './components/homePage/about';
 import Navbar from './components/navbar/navbar-component';
 import SignIn from './components/signIn/signIn';
@@ -21,6 +22,7 @@ function App() {
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [response, setResponse] = useState('');
 
   const [userId, setUserId] = useState('');
   const [authToken, setAuthToken] = useState('');
@@ -92,10 +94,11 @@ function App() {
 
     fetch(BaseUrl + 'login', requestOptions)
       .then((res) => {
-        if (res.ok) {
-          return res.json();
+        if (!res.ok) {
+          setResponse(res.message);
+          throw res;
         }
-        throw res;
+        return res.json();
       })
       .then((data) => {
         setAuthToken(data.access_token);
@@ -119,12 +122,18 @@ function App() {
         const now = new Date();
         localStorage.setItem('authTime', now.getTime());
 
-        navigate('/expenditures');
+        navigate('/signed-home');
 
         setError('');
       })
       .catch((err) => {
-        setError(err);
+        try {
+          err.json().then((errorData) => {
+            setError(errorData.detail);
+          });
+        } catch {
+          setError('Server error. Try agin later.');
+        }
       });
   };
 
@@ -154,13 +163,13 @@ function App() {
         setAuthTokenType(localStorage.getItem('authTokenType'));
         setUsername(localStorage.getItem('username'));
         setUserId(localStorage.getItem('userId'));
-        setUserType(localStorage.getItem('userType'))
+        setUserType(localStorage.getItem('userType'));
         setCreatedOn(localStorage.getItem('createdOn'));
-        setImageUrl(localStorage.getItem('userImageUrl'))
+        setImageUrl(localStorage.getItem('userImageUrl'));
         localStorage.setItem('authTime', now.getTime());
       }
     }
-  }, []);  
+  }, []);
 
   return (
     <>
@@ -183,11 +192,17 @@ function App() {
             path='/'
             element={<HomePage />}
           />
-
           <Route
             exact
             path='/about'
             element={<About />}
+          />
+
+
+          <Route
+            exact
+            path='/signed-home'
+            element={<SignedHome/>}
           />
           <Route
             exact
@@ -198,6 +213,7 @@ function App() {
                 authTokenType={authTokenType}
                 BaseUrl={BaseUrl}
                 navigate={navigate}
+                username={username}
               />
             }
           />
@@ -282,6 +298,7 @@ function App() {
                 signIn={signIn}
                 setUsername={setUsername}
                 error={error}
+                response={response}
                 authToken={authToken}
                 navigate={navigate}
               />

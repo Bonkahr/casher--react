@@ -30,26 +30,28 @@ const Profile = ({ name, username, userType, createdOn, imageUrl, BaseUrl }) => 
           <p className='col-lg-8 mx-auto fs-5 text-muted'>
             Joined: {y_m_d} at {time}
           </p>
-          <div className='d-inline-flex gap-2 mb-5'>
+          <div className='d-inline gap-2 mb-5'>
             <Link
               to='/edit-profile'
-              className='d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill'
+              className='btn btn-outline-info btn-sm px-4 rounded-pill'
               type='button'
             >
               Edit Photo
             </Link>
+            {userType === 'user' ? (
+              <Link
+                to='/delete-profile'
+                className='btn btn-outline-danger btn-sm px-4 rounded-pill'
+                type='button'
+              >
+                Delete Account
+              </Link>
+            ) : (
+              <p className='text-info'>
+                You are an admin, to delete your account you know what to do.
+              </p>
+            )}
           </div>
-          {userType === 'user' ? (
-            <Link
-              to='/delete-profile'
-              className='btn btn-outline-secondary btn-lg px-4 rounded-pill'
-              type='button'
-            >
-              Delete Account
-            </Link>
-          ) : (
-            <p className='text-info'>You are an admin, to delete your account you know what to do.</p>
-          )}
         </div>
       </div>
     </div>

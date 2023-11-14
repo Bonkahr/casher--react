@@ -18,8 +18,6 @@ const Admin = ({ authToken, authTokenType, BaseUrl, userType, navigate }) => {
     }),
   };
 
-  console.log(requestOptions);
-
   useEffect(() => {
     fetch(BaseUrl + 'user', requestOptions)
       .then((res) => {
