@@ -17,7 +17,7 @@ const SignedHome = () => {
               Manage my Expeditures
             </Link>
             <Link
-              to='#'
+              to='/Sales'
               type='button'
               className='btn btn-info btn-md px-4 gap-3'
             >

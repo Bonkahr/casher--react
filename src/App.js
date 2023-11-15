@@ -16,6 +16,8 @@ import Profile from './components/profile/profile';
 import EditImage from './components/editProfile/editImage';
 import DeleteProfile from './components/editProfile/deleteProfile';
 import Admin from './components/admin/admin';
+import Sales from './components/salesComponent/sales';
+import SaleView from './components/salesComponent/saleView';
 
 function App() {
   const BaseUrl = 'http://127.0.0.1:8000/';
@@ -198,12 +200,12 @@ function App() {
             element={<About />}
           />
 
-
           <Route
             exact
             path='/signed-home'
-            element={<SignedHome/>}
+            element={<SignedHome />}
           />
+
           <Route
             exact
             path='/expenditures'
@@ -217,6 +219,27 @@ function App() {
               />
             }
           />
+
+          <Route
+            exact
+            path='/sales'
+            element={
+              <Sales
+                authToken={authToken}
+                authTokenType={authTokenType}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+                username={username}
+              />
+            }
+          />
+
+          <Route
+            exact
+            path='/sale-view'
+            element={<SaleView />}
+          />
+
           <Route
             exact
             path='/expenditures/new-expenditure'
