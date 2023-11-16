@@ -18,6 +18,7 @@ import DeleteProfile from './components/editProfile/deleteProfile';
 import Admin from './components/admin/admin';
 import Sales from './components/salesComponent/sales';
 import SaleView from './components/salesComponent/saleView';
+import NewSale from './components/salesComponent/newSale';
 
 function App() {
   const BaseUrl = 'http://127.0.0.1:8000/';
@@ -134,7 +135,7 @@ function App() {
             setError(errorData.detail);
           });
         } catch {
-          setError('Server error. Try agin later.');
+          setError('Server error. Try again later.');
         }
       });
   };
@@ -238,6 +239,19 @@ function App() {
             exact
             path='/sale-view'
             element={<SaleView />}
+          />
+
+          <Route
+            exact
+            path='/sales/new-sale'
+            element={
+              <NewSale
+                authToken={authToken}
+                authTokenType={authTokenType}
+                BaseUrl={BaseUrl}
+                navigate={navigate}
+              />
+            }
           />
 
           <Route

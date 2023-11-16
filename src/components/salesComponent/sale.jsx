@@ -71,11 +71,11 @@ const Sale = ({ sales, BaseUrl, authToken, authTokenType, navigate }) => {
             <td className='table-active'>Bought Amount</td>
             <td className='table-active'>Sell Amount</td>
             <td className='table-active'>Profit</td>
+            <td className='table-active'>Transaction code</td>
             <td
-              colSpan='2'
               className='table-active'
             >
-              Description
+              Balance
             </td>
             <td className='table-active'>Recorded on</td>
             <td

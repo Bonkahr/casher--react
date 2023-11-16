@@ -12,7 +12,6 @@ const Expenditure = ({
   navigate,
   username,
 }) => {
-
   const [expenditures, setExpenditures] = useState([]);
   const [error, setError] = useState([]);
 
@@ -93,14 +92,16 @@ const Expenditure = ({
                 Add Expenditure
               </button>
             </div>
-            <div className='col'>
-              <button
-                className='btn btn-outline-info'
-                onClick={handleDownload}
-              >
-                Download statement
-              </button>
-            </div>
+            {expenditures.length > 0 && (
+              <div className='col'>
+                <button
+                  className='btn btn-outline-info'
+                  onClick={handleDownload}
+                >
+                  Download statement
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

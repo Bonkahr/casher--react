@@ -5,14 +5,7 @@ import Sale from './sale';
 
 import './sales.scss';
 
-const Sales = ({
-  authToken,
-  authTokenType,
-  BaseUrl,
-  navigate,
-  username,
-}) => {
-
+const Sales = ({ authToken, authTokenType, BaseUrl, navigate, username }) => {
   const [sales, setSales] = useState([]);
   const [error, setError] = useState([]);
 
@@ -46,41 +39,41 @@ const Sales = ({
       });
   }, []);
 
-  const handleAddExpenditure = () => {
-    navigate('/expenditures/new-expenditure');
+  const handleAddSale = () => {
+    navigate('/sales/new-sale');
   };
 
-  const requestDownload = {
-    method: 'GET',
-    headers: new Headers({
-      Authorization: authTokenType + ' ' + authToken,
-      'Content-Type': 'application/pdf',
-    }),
-  };
+  // const requestDownload = {
+  //   method: 'GET',
+  //   headers: new Headers({
+  //     Authorization: authTokenType + ' ' + authToken,
+  //     'Content-Type': 'application/pdf',
+  //   }),
+  // };
 
-  const handleDownload = async () => {
-    if (!sales.length > 0) {
-      setError('Create expenditures to request for statement.');
-      return;
-    }
+  // const handleDownload = async () => {
+  //   if (!sales.length > 0) {
+  //     setError('Create expenditures to request for statement.');
+  //     return;
+  //   }
 
-    fetch(BaseUrl + 'expenditure/statement', requestDownload)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `${username}_statement.pdf`);
+  //   fetch(BaseUrl + 'expenditure/statement', requestDownload)
+  //     .then((res) => res.blob())
+  //     .then((blob) => {
+  //       const url = window.URL.createObjectURL(new Blob([blob]));
+  //       const link = document.createElement('a');
+  //       link.href = url;
+  //       link.setAttribute('download', `${username}_statement.pdf`);
 
-        document.body.appendChild(link);
-        link.click();
+  //       document.body.appendChild(link);
+  //       link.click();
 
-        link.parentNode.removeChild(link);
-      })
-      .finally(() => {
-        setError('');
-      });
-  };
+  //       link.parentNode.removeChild(link);
+  //     })
+  //     .finally(() => {
+  //       setError('');
+  //     });
+  // };
 
   if (authToken) {
     return (
@@ -96,19 +89,21 @@ const Sales = ({
             <div className='col'>
               <button
                 className='btn btn-outline-primary'
-                onClick={handleAddExpenditure}
+                onClick={handleAddSale}
               >
-                Add Expenditure
+                Add a new sale
               </button>
             </div>
-            <div className='col'>
-              <button
-                className='btn btn-outline-info'
-                onClick={handleDownload}
-              >
-                Download statement
-              </button>
-            </div>
+            {/* {sales.length > 0 && (
+              <div className='col'>
+                <button
+                  className='btn btn-outline-info'
+                  onClick={handleDownload}
+                >
+                  Download statement
+                </button>
+              </div>
+            )} */}
           </div>
         </div>
 

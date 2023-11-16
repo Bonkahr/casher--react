@@ -17,7 +17,8 @@ const Sal = ({ sale, navigate }) => {
       <td>{sale.bought_amount}</td>
       <td>{sale.sell_amount}</td>
       <td>{sale.profit}</td>
-      <td colSpan='2'>{sale.description}</td>
+      <td>{sale.transaction_code}</td>
+      <td>{sale.balance}</td>
       <td>
         {y_m_d} : {time}
       </td>

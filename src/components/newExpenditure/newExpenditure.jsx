@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import './newExpenditure.scss';
 
-const NewExpenditure = ({ authToken, authTokenType, navigate }) => {
-  const BaseUrl = 'http://127.0.0.1:8000/';
-
+const NewExpenditure = ({ authToken, authTokenType, navigate, BaseUrl }) => {
+  
   const [moneyType, setMoneyType] = useState('');
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState('');
