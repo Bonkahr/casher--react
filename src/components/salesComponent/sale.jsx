@@ -64,6 +64,7 @@ const Sale = ({ sales, BaseUrl, authToken, authTokenType, navigate }) => {
 
   return (
     <div>
+      <h3 className='text-center text-primary'>Transaction Summary</h3>
       <table className='table'>
         <tbody>
           <tr className='tr-main'>
@@ -71,11 +72,7 @@ const Sale = ({ sales, BaseUrl, authToken, authTokenType, navigate }) => {
             <td className='table-active'>Sell Amount</td>
             <td className='table-active'>Profit</td>
             <td className='table-active'>Payment Mode</td>
-            <td
-              className='table-active'
-            >
-              Balance
-            </td>
+            <td className='table-active'>Balance</td>
             <td className='table-active'>Transaction on</td>
             <td
               className='table-active'

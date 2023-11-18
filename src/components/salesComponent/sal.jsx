@@ -51,7 +51,7 @@ const Sal = ({ sale, BaseUrl, authToken, authTokenType, navigate }) => {
           to='/sale-view'
           onClick={handleView}
         >
-          View
+          Detail View
         </Link>
 
         <button
