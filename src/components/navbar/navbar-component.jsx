@@ -6,8 +6,8 @@ import './navbar-component.scss';
 
 const Navbar = ({ authToken, name, logOut, userType }) => {
   return (
-    <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom'>
-      <ul className='nav col-12 col-md-auto mb-2 justify-content-center mb-md-0'>
+    <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom header'>
+      <ul className='nav nav-pills '>
         {authToken ? (
           <Link
             to='/signed-home'
@@ -60,7 +60,7 @@ const Navbar = ({ authToken, name, logOut, userType }) => {
             Logout
           </button>
         </div>
-        ) }
+      )}
     </header>
   );
 };

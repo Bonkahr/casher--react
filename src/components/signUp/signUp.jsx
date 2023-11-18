@@ -178,6 +178,24 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
               <p className='text-danger'>{error}</p>
             </div>
           )}
+
+          <div className='form-check'>
+            <input
+              className='form-check-input'
+              type='checkbox'
+              value=''
+              id='flexCheckChecked'
+              checked
+              disabled
+            />
+            <label
+              className='form-check-label'
+              for='flexCheckChecked'
+            >
+              This site is on development, you might experience some bugs.
+            </label>
+          </div>
+
           <button
             className='btn btn-primary w-100 py-2'
             type='submit'
