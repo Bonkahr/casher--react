@@ -75,7 +75,11 @@ const SignUp = ({ directLogin, BaseUrl, navigate, authToken }) => {
       .catch((err) => {
         try {
           err.json().then((errorData) => {
-            setError(errorData.detail);
+            if (typeof errorData.detail !== 'string') {
+              setError('Kindly fill all fields.');
+            } else {
+              setError(errorData.detail);
+            }
           });
         } catch {
           setError('Server error. Try agin later.');

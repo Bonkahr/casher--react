@@ -22,7 +22,8 @@ const Sale = ({ sales, BaseUrl, authToken, authTokenType, navigate }) => {
   const [allSales, setAllSales] = useState(0);
   const [allProfits, setAllProfits] = useState(0);
   const [allDebpts, setAllDebpts] = useState(0);
-  const [allPercentageProfit, setAllPercentageProfit] = useState(0);
+  const [ allPercentageProfit, setAllPercentageProfit ] = useState(0);
+  
 
   const requestOptions = {
     method: 'GET',

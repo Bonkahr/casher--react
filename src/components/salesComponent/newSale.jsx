@@ -62,6 +62,9 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     'Kimono',
     'Scarf',
     'T-shirt',
+    'Short',
+    'Pull neck',
+    'Jumper'
   ];
 
   const handleDate = (d) => {
@@ -111,7 +114,12 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
       .catch((err) => {
         try {
           err.json().then((errorData) => {
-            setError(errorData.detail);
+            if (typeof (errorData.detail) !== 'string') {
+              setError('Kindly fill all fields.');
+            }
+            else {
+              setError(errorData.detail);
+            }
           });
         } catch {
           setError('Server error. Try agin later.');

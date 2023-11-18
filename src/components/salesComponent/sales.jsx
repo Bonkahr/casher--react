@@ -26,14 +26,18 @@ const Sales = ({ authToken, authTokenType, BaseUrl, navigate, username }) => {
         throw res;
       })
       .then((data) => {
-        setSales(data);
+        if (data.length > 10) {
+          setSales(data.slice(0, 10));
+        } else {
+          setSales(data);
+        }
       })
       .catch((err) => {
         try {
           err.json().then((errorData) => {
             if (errorData.detail === 'Not authenticated') {
               setError(
-                'The sale was deleted. Navigate to homepage, then come back to your sales page.'
+                'Kindly navigate to homepage, then come back to your sales page.'
               );
             } else {
               setError(errorData.detail);

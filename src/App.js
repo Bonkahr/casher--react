@@ -132,7 +132,11 @@ function App() {
       .catch((err) => {
         try {
           err.json().then((errorData) => {
-            setError(errorData.detail);
+            if (typeof errorData.detail !== 'string') {
+              setError('Kindly fill all fields.');
+            } else {
+              setError(errorData.detail);
+            }
           });
         } catch {
           setError('Server under maintenance. Try again later.');
