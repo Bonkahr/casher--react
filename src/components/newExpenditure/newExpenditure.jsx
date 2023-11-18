@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
+import MyDatePicker from '../consumables/datePicker';
+
 import './newExpenditure.scss';
 
 const NewExpenditure = ({ authToken, authTokenType, navigate, BaseUrl }) => {
-  
   const [moneyType, setMoneyType] = useState('');
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const [error, setError] = useState('');
 
@@ -23,8 +24,8 @@ const NewExpenditure = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     setDescription(e.target.value);
   };
 
-  const handleDate = (e) => {
-    setDate(e.target.value);
+  const handleDate = (d) => {
+    setDate(d);
   };
 
   const handleSubmit = (e) => {
@@ -131,16 +132,11 @@ const NewExpenditure = ({ authToken, authTokenType, navigate, BaseUrl }) => {
           className='md-form md-outline input-with-post-icon datepicker margin-sm'
           inline='true'
         >
-          <label htmlFor='paid-on'>Transacted on: </label>
-          <input
-            placeholder='DD-MM-YYYY (23-12-2022)'
-            type='text'
-            id='example'
-            className='form-control'
+          <MyDatePicker
+            label='Transacted on'
             value={date}
             onChange={handleDate}
           />
-          <i className='fas fa-calendar input-prefix'></i>
         </div>
 
         {error && (

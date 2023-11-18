@@ -31,7 +31,13 @@ const Sales = ({ authToken, authTokenType, BaseUrl, navigate, username }) => {
       .catch((err) => {
         try {
           err.json().then((errorData) => {
-            setError(errorData.detail);
+            if (errorData.detail === 'Not authenticated') {
+              setError(
+                'The sale was deleted. Navigate to homepage, then come back to your sales page.'
+              );
+            } else {
+              setError(errorData.detail);
+            }
           });
         } catch {
           setError('Server error. Try agin later.');

@@ -21,7 +21,7 @@ import SaleView from './components/salesComponent/saleView';
 import NewSale from './components/salesComponent/newSale';
 
 function App() {
-  const BaseUrl = 'http://127.0.0.1:8000/';
+  const BaseUrl = 'https://casher-app-e9676297760d.herokuapp.com/';
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -135,7 +135,7 @@ function App() {
             setError(errorData.detail);
           });
         } catch {
-          setError('Server error. Try again later.');
+          setError('Server under maintenance. Try again later.');
         }
       });
   };

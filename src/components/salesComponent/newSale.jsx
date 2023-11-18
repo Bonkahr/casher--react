@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
+import MyDatePicker from '../consumables/datePicker';
+
 import './sales.scss';
 
 const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
   const [item, setItem] = useState('');
-  const [bought, setbought] = useState(null);
-  const [sell, setSell] = useState(null);
-  const [balance, setBalance] = useState(null);
+  const [bought, setbought] = useState(0);
+  const [sell, setSell] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [paymentMode, setPaymentMode] = useState('');
   const [transactionCode, setTransactioCode] = useState('');
-  const [description, setDescription] = useState('');
+  const [ description, setDescription ] = useState('');
+  // const [dateValue, setDateValue] = useState('')
   const [date, setDate] = useState('');
 
   const [error, setError] = useState('');
@@ -55,15 +58,16 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     'Jacket',
   ];
 
-  const handleDate = (e) => {
-    setDate(e.target.value);
-  };
+
+  const handleDate = (d) => {
+    setDate(d)
+  }
 
   useEffect(() => {
     if (paymentMode !== 'mobile money') {
-      setTransactioCode('N/A')
+      setTransactioCode('N/A');
     }
-  }, [paymentMode])
+  }, [paymentMode]);
 
   const handleSubmit = (e) => {
     e?.preventDefault();
@@ -114,46 +118,54 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     <div className='container new-expen'>
       <h3 className='text-primary'>Create a new sale.</h3>
       <form>
-        <div className='col-md-4 margin-sm'>
-          <label
-            htmlFor='mode-payment'
-            className='form-label'
-          >
-            Item:
-          </label>
-          <select
-            className='form-select'
-            id='mode-payment'
-            required={true}
-            defaultValue={item}
-            onChange={handleItem}
-          >
-            <option>Choose...</option>
-            {itemSold.map((item) => (
-              <option value={item}>{item}</option>
-            ))}
-          </select>
-        </div>
+        <div className='row'>
+          <div className='col margin-sm'>
+            <label
+              htmlFor='item'
+              className='form-label'
+              required
+            >
+              Item:
+            </label>
+            <select
+              className='form-select'
+              id='mode-payment'
+              required={true}
+              defaultValue={item}
+              onChange={handleItem}
+            >
+              <option>Choose...</option>
+              {itemSold.map((item, i) => (
+                <option
+                  key={i}
+                  value={item}
+                >
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className='col-md-4 margin-sm'>
-          <label
-            htmlFor='mode-payment'
-            className='form-label'
-          >
-            Mode of Payment:
-          </label>
-          <select
-            className='form-select'
-            id='mode-payment'
-            required=''
-            defaultValue={paymentMode}
-            onChange={handlePaymentMode}
-          >
-            <option>Choose...</option>
-            <option value='cash'>Cash</option>
-            <option value='mobile money'>Mobile Transfer</option>
-            <option value='gift'>gift</option>
-          </select>
+          <div className='col margin-sm'>
+            <label
+              htmlFor='mode-payment'
+              className='form-label'
+            >
+              Mode of Payment:
+            </label>
+            <select
+              className='form-select'
+              id='mode-payment'
+              required=''
+              defaultValue={paymentMode}
+              onChange={handlePaymentMode}
+            >
+              <option>Choose...</option>
+              <option value='cash'>Cash</option>
+              <option value='mobile money'>Mobile Transfer</option>
+              <option value='gift'>Gift</option>
+            </select>
+          </div>
         </div>
 
         <div className='col-md-3 margin-sm'>
@@ -238,7 +250,7 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
             htmlFor='description'
             className='form-label'
           >
-            Description
+            Description:
           </label>
           <textarea
             className='form-control'
@@ -252,19 +264,13 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
 
         <div
           id='paid-on'
-          className='md-form md-outline input-with-post-icon datepicker margin-sm'
-          inline='true'
+          className='mb-6 margin-sm'
         >
-          <label htmlFor='paid-on'>Transacted on: </label>
-          <input
-            placeholder='DD-MM-YYYY (23-12-2022)'
-            type='text'
-            id='example'
-            className='form-control'
-            value={date}
-            onChange={handleDate}
+          <MyDatePicker
+            label='Transaction on'
+            handleDate={handleDate}
+            date={date}
           />
-          <i className='fas fa-calendar input-prefix'></i>
         </div>
 
         {error && (
@@ -274,7 +280,7 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
         )}
 
         <button
-          className='btn btn-primary margin-sm'
+          className='btn btn-primary margin-sm new-sale-btn'
           type='submit'
           onClick={handleSubmit}
         >

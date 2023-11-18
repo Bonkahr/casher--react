@@ -68,16 +68,15 @@ const Sale = ({ sales, BaseUrl, authToken, authTokenType, navigate }) => {
         <tbody>
           <tr className='tr-main'>
             <td className='table-active'>Item</td>
-            <td className='table-active'>Bought Amount</td>
             <td className='table-active'>Sell Amount</td>
             <td className='table-active'>Profit</td>
-            <td className='table-active'>Transaction code</td>
+            <td className='table-active'>Payment Mode</td>
             <td
               className='table-active'
             >
               Balance
             </td>
-            <td className='table-active'>Recorded on</td>
+            <td className='table-active'>Transaction on</td>
             <td
               className='table-active'
               colSpan='2'
