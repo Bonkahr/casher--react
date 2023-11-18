@@ -6,7 +6,7 @@ import './navbar-component.scss';
 
 const Navbar = ({ authToken, name, logOut, userType }) => {
   return (
-    <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom header'>
+    <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom'>
       <ul className='nav nav-pills '>
         {authToken ? (
           <Link
