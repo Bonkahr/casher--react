@@ -56,6 +56,12 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     'Panty',
     'Belt',
     'Jacket',
+    'Bra',
+    'Brazer',
+    'Towel'
+    'Kimono',
+    'Scarf',
+    'T-shirt'
   ];
 
 
