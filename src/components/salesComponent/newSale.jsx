@@ -11,7 +11,7 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
   const [balance, setBalance] = useState(0);
   const [paymentMode, setPaymentMode] = useState('');
   const [transactionCode, setTransactioCode] = useState('');
-  const [ description, setDescription ] = useState('');
+  const [description, setDescription] = useState('');
   // const [dateValue, setDateValue] = useState('')
   const [date, setDate] = useState('');
 
@@ -58,16 +58,15 @@ const NewSale = ({ authToken, authTokenType, navigate, BaseUrl }) => {
     'Jacket',
     'Bra',
     'Brazer',
-    'Towel'
+    'Towel',
     'Kimono',
     'Scarf',
-    'T-shirt'
+    'T-shirt',
   ];
 
-
   const handleDate = (d) => {
-    setDate(d)
-  }
+    setDate(d);
+  };
 
   useEffect(() => {
     if (paymentMode !== 'mobile money') {
